@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case $1 in
+    "-i") LEVEL="INF";;
+    "-w") LEVEL="WAR";;
+    "-e") LEVEL="ERR";;
+esac
+
+echo "[$LEVEL] $2";

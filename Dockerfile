@@ -7,7 +7,7 @@ WORKDIR /app
 COPY root /
 
 RUN apk add --update --no-cache supervisor \
-	&& chmod 755 /app/supervisor/init.sh \
+	&& chmod 755 /usr/sbin/log \
 	&& chmod 755 /app/healthcheck.sh \
 	&& chmod 755 /app/entrypoint.sh
 

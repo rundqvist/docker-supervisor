@@ -26,4 +26,4 @@ TODO
 TODO
 
 ## Issues
-Please report issues at https://github.com/rundqvist/supervisor/issues
+Please report issues at https://github.com/rundqvist/docker-supervisor/issues

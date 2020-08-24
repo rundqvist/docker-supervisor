@@ -1,6 +1,7 @@
 # Supervisor container
-A small supervisor container based on Alpine Linux.  
-https://hub.docker.com/r/rundqvist/supervisor/
+A small supervisor container based on Alpine Linux.
+
+[![Docker pulls](https://img.shields.io/docker/pulls/rundqvist/supervisor.svg)](https://hub.docker.com/r/rundqvist/supervisor)
 
 # Appreciate my work?
 Do you find this container useful? Please consider a donation.

@@ -2,24 +2,27 @@
 
 log -i "Initialize begin.";
 
-#
-# Find all filenames matching [dd]-init.sh and order them
-#
-INIT=$(find /app/*/ -type f -name *-init.sh | sed -n -e 's/^\(.*\)\/\(\d\d\)-init.sh/\2-init.sh/p' | sort)
+for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
-for file in $INIT ; do
+    INIT=$(find /app/*/ -type f -name 0$i-init.sh)
 
-    #
-    # Resolve entire path to file
-    #
-    filepath=$(find /app/ -type f -name $file)
+    for filepath in $INIT ; do
 
-    #
-    # Ensure execution rights and execute file
-    #
-    chmod +x $filepath
-    log -i "Executing: "$filepath
-    $filepath
+        #
+        # Ensure execution rights and execute file
+        #
+        chmod +x $filepath
+        log -d "Executing: "$filepath
+        $filepath
+
+        if [ $? = 1 ] ; then
+
+            log -e "Initialize failed on executing: $filepath"
+            exit 1;
+
+        fi
+        
+    done
 
 done
 

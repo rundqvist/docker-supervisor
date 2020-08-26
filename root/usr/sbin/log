@@ -1,9 +1,21 @@
 #!/bin/sh
 
 case $1 in
-    "-i") LEVEL="INF";;
-    "-w") LEVEL="WAR";;
-    "-e") LEVEL="ERR";;
+    "-d") LEVEL=1; LABEL="DBG";;
+    "-i") LEVEL=2; LABEL="INF";;
+    "-w") LEVEL=3; LABEL="WAR";;
+    "-e") LEVEL=4; LABEL="ERR";;
+    *) LEVEL=2; LABEL="INF";;
 esac
 
-echo "[$LEVEL] $2";
+case $LOG_LEVEL in
+    "debug") THRESHOLD=0;;
+    "info") THRESHOLD=1;;
+    "warning") THRESHOLD=2;;
+    "error") THRESHOLD=3;;
+    *) THRESHOLD=1;;
+esac
+
+if [ $LEVEL -gt $THRESHOLD ] ; then
+    echo "[$LABEL] $2";
+fi

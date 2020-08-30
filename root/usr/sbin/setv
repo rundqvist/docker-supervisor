@@ -1,8 +1,12 @@
 #!/bin/sh
 
+mkdir -p /app.reg/var/
+
 if [ "$1" = "-i" ] ; then
-    for var in $(env) ; do
-        $(echo $var | sed 's/\(.*\)=\(.*\)$/setv \1 \2/g')
+    printenv | tail -n +2 | sed 's/.*/&/' | while read line; do
+        var=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\1/g')
+        val=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\2/g')
+        echo "$val" > /app.reg/var/$var
     done
 
     exit 0;
@@ -11,6 +15,4 @@ fi
 NAME=$1
 VALUE=$2
 
-mkdir -p /app.reg/var/
-
-echo "$2" > /app.reg/var/$1
+echo $VALUE > /app.reg/var/$NAME

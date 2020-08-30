@@ -8,6 +8,8 @@ COPY root /
 
 RUN apk add --update --no-cache supervisor \
 	&& chmod 755 /usr/sbin/log \
+	&& chmod 755 /usr/sbin/getv \
+	&& chmod 755 /usr/sbin/setv \
 	&& chmod 755 /app/healthcheck.sh \
 	&& chmod 755 /app/entrypoint.sh
 

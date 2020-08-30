@@ -2,6 +2,4 @@
 
 NAME=$1
 
-if [ -f /app.reg/var/$1 ] ; then
-    cat /app.reg/var/$1
-fi
+cat /app.reg/var/$NAME 2>/dev/null

@@ -30,7 +30,7 @@ case $ACTION in
     "-d") # delete
         rm -f $VAR_PATH$NAME >/dev/null
     ;;
-    "-a") # add
+    "-a") # append
         if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ] || [ "$OPTION" = "-i" ]; then
             echo $VALUE >> $VAR_PATH$NAME
         fi

@@ -3,7 +3,7 @@ A small supervisor container based on Alpine Linux.
 
 [![Docker pulls](https://img.shields.io/docker/pulls/rundqvist/supervisor.svg)](https://hub.docker.com/r/rundqvist/supervisor)
 
-# Do you find this container useful? 
+## Do you find this container useful? 
 Please support the development by making a small donation.
 
 [![Support](https://img.shields.io/badge/support-Flattr-brightgreen)](https://flattr.com/@rundqvist)

@@ -1,0 +1,56 @@
+#!/bin/sh
+
+VAR_PATH="/app.reg/var/"
+
+if [ "${1:0:1}" = "-" ] ; then
+    ACTION=$1
+
+    if [ "${2:0:1}" = "-" ] ; then
+        OPTION=$2
+        NAME=$3
+        VALUE=$4
+    else
+        OPTION=""
+        NAME=$2
+        VALUE=$3
+    fi
+elif [ -z "$2" ] ; then
+    ACTION="-g"
+    NAME=$1
+else
+    ACTION="-s"
+    NAME=$1
+    VALUE=$2
+fi
+
+mkdir -p $VAR_PATH
+
+case $ACTION in
+
+    "-d") # delete
+        rm -f $VAR_PATH$NAME >/dev/null
+    ;;
+    "-a") # append
+        if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ] || [ "$OPTION" = "-i" ]; then
+            echo $VALUE >> $VAR_PATH$NAME
+        fi
+    ;;
+    "-g") # get
+        cat $VAR_PATH$NAME 2>/dev/null
+    ;;
+    "-s") # set
+        echo $VALUE > $VAR_PATH$NAME
+    ;;
+    "-e") # exists
+        test -f $VAR_PATH$NAME
+        echo $?
+    ;;
+    "--set-env")
+        printenv | while read line; do
+            var=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\1/g')
+            val=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\2/g')
+            echo "$val" > $VAR_PATH$var
+        done
+    ;;
+
+esac

@@ -7,11 +7,9 @@ WORKDIR /app
 COPY root /
 
 RUN apk add --update --no-cache supervisor \
-	&& chmod 755 /usr/sbin/log \
-	&& chmod 755 /usr/sbin/getv \
-	&& chmod 755 /usr/sbin/setv \
-	&& chmod 755 /app/healthcheck.sh \
-	&& chmod 755 /app/entrypoint.sh
+	&& chmod +x /usr/sbin/log /usr/sbin/var /usr/sbin/dict /usr/sbin/getv /usr/sbin/setv \
+	&& chmod +x /app/healthcheck.sh \
+	&& chmod +x /app/entrypoint.sh
 
 HEALTHCHECK --interval=30s --timeout=60s --start-period=15s \  
  CMD /bin/sh /app/healthcheck.sh

@@ -1,7 +1,10 @@
 #!/bin/sh
 
+cat /app/supervisor/notice.txt
+touch /var/log/main.log
+tail -f /var/log/main.log &
 var --set-env;
-log -i "Initialize begin.";
+log -v "Initialize begin.";
 
 for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
@@ -18,7 +21,7 @@ for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
         if [ $? = 1 ] ; then
 
-            log -e "Initialize failed on executing: $filepath"
+            log -d "Initialize failed on executing: $filepath"
             exit 1;
 
         fi
@@ -26,8 +29,6 @@ for i in 0 1 2 3 4 5 6 7 8 9 ; do
     done
 
 done
-
-log -i "Initialize done.";
 
 log -i "Starting supervisor.";
 exec supervisord -c /app/supervisor/01-supervisord.conf

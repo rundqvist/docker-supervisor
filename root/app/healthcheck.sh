@@ -19,7 +19,7 @@ for filepath in $CHECKS ; do
     RC=$?
 
     if [ $RC -eq 1 ]; then
-        echo "Healthcheck $filepath failed" >> /var/log/healthcheck.log
+        log -d "Healthcheck $filepath failed"
         exit 1;
     fi
 done

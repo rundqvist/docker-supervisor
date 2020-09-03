@@ -1,0 +1,13 @@
+
+*************************************************************************************************
+* This container is created and maintained by @rundqvist                                        *
+*************************************************************************************************
+* Please support the development by making a small donation.                                    *
+* https://flattr.com/@rundqvist                                                                 *
+* https://www.buymeacoffee.com/rundqvist                                                        *
+* https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SZ7J9JL9P5DGE&source=url *
+*                                                                                               *
+* Find my other projects on:                                                                    *
+* Docker Hub: https://hub.docker.com/u/rundqvist                                                *
+* GitHub: https://github.com/rundqvist                                                          *
+*************************************************************************************************

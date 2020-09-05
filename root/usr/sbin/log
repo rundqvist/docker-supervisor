@@ -9,7 +9,7 @@ case $1 in
     *) LEVEL=3; LABEL="INF";;
 esac
 
-case $LOG_LEVEL in
+case $(var LOG_LEVEL) in
     "verbose") THRESHOLD=0;;
     "debug") THRESHOLD=1;;
     "info") THRESHOLD=2;;
@@ -20,5 +20,6 @@ esac
 
 
 if [ $LEVEL -gt $THRESHOLD ] ; then
-    echo "[$LABEL] $2" >> /var/log/main.log
+    timestamp=$(date +"%Y-%m-%d %T")
+    echo "[$timestamp] [$LABEL] $2" >> /var/log/main.log
 fi

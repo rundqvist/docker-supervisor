@@ -10,7 +10,7 @@ for filepath in $CHECKS ; do
     #
     # Ensure execution rights and execute file
     #
-    log -d "[Healthcheck] Executing $filepath"
+    log -v "[Healthcheck] Executing $filepath"
     chmod +x $filepath    
     $filepath
 

@@ -1,10 +1,13 @@
 #!/bin/sh
 
-cat /app/supervisor/notice.txt
 touch /var/log/main.log
-tail -f /var/log/main.log &
+tail -f -n 0 /var/log/main.log &
+
+cat /app/supervisor/info.txt
+
 var --set-env;
-log -v "Initialize begin.";
+
+log -i "Initializing container.";
 
 for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
@@ -21,7 +24,7 @@ for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
         if [ $? = 1 ] ; then
 
-            log -d "Initialize failed on executing: $filepath"
+            log -e "Initialize failed on executing: $filepath"
             exit 1;
 
         fi
@@ -30,5 +33,5 @@ for i in 0 1 2 3 4 5 6 7 8 9 ; do
 
 done
 
-log -i "Starting supervisor.";
+log -i "Starting applications.";
 exec supervisord -c /app/supervisor/01-supervisord.conf

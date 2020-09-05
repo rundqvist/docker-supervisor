@@ -1,5 +1,0 @@
-#!/bin/sh
-
-NAME=$1
-
-cat /app.reg/var/$NAME 2>/dev/null

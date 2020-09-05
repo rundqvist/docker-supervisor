@@ -3,13 +3,14 @@
 #
 # Find all healtcheck.sh files
 #
-CHECKS=$(find /app/*/ -type f -name healthcheck.sh)
+CHECKS="$(find /app/*/ -type f -name healthcheck.sh)";
 
 for filepath in $CHECKS ; do
 
     #
     # Ensure execution rights and execute file
     #
+    log -d "[Healthcheck] Executing $filepath"
     chmod +x $filepath    
     $filepath
 
@@ -19,7 +20,7 @@ for filepath in $CHECKS ; do
     RC=$?
 
     if [ $RC -eq 1 ]; then
-        log -d "Healthcheck $filepath failed"
+        log -e "[Healthcheck] $filepath failed"
         exit 1;
     fi
 done

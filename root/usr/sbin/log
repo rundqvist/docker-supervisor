@@ -21,5 +21,9 @@ esac
 
 if [ $LEVEL -gt $THRESHOLD ] ; then
     timestamp=$(date +"%Y-%m-%d %T")
-    echo "[$timestamp] [$LABEL] $2" >> /var/log/main.log
+    if [ -z "$3" ] ; then
+        echo "[$timestamp] [$LABEL] $2" >> /var/log/main.log
+    else
+        echo "[$timestamp] [$LABEL] [$2] $3" >> /var/log/main.log
+    fi
 fi

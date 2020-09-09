@@ -43,7 +43,7 @@ case $ACTION in
     ;;
     "-e") # exists
         test -f $VAR_PATH$NAME
-        echo $?
+        exit $?
     ;;
     "--set-env")
         printenv | while read line; do

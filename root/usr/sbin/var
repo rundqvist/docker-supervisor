@@ -24,7 +24,7 @@ done
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 1 ] ; then ACTION="g"; NAME=$1; fi
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="s"; NAME=$1; VALUE=$2; fi
 
-if [ ! -z $KEY ] ; then VAR_PATH="$VAR_PATH$KEY/"; fi;
+if [ ! -z $KEY ] ; then VAR_PATH="$VAR_PATH.$KEY/"; fi;
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] ; then ACTION="g"; NAME=$3; fi
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 4 ] ; then ACTION="s"; NAME=$3; VALUE=$4; fi
 

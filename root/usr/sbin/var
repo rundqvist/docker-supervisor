@@ -1,56 +1,54 @@
 #!/bin/sh
 
-VAR_PATH="/app.reg/var/"
+VAR_PATH="/.registry/var/"
 
-if [ "${1:0:1}" = "-" ] ; then
-    ACTION=$1
+if [ "$1" = "--set-env" ] ; then 
 
-    if [ "${2:0:1}" = "-" ] ; then
-        OPTION=$2
-        NAME=$3
-        VALUE=$4
-    else
-        OPTION=""
-        NAME=$2
-        VALUE=$3
-    fi
-elif [ -z "$2" ] ; then
-    ACTION="-g"
-    NAME=$1
-else
-    ACTION="-s"
-    NAME=$1
-    VALUE=$2
+    mkdir -p $VAR_PATH
+    printenv | while read line; do
+        var=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\1/g')
+        val=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\2/g')
+        echo "$val" > $VAR_PATH$var
+    done
+    exit 0;
 fi
+
+while getopts ":g:s:d:a:e:k:v:" arg; do
+  case $arg in
+    k) KEY=$OPTARG;;
+    v) VALUE=$OPTARG;;
+    *) ACTION=$arg; NAME=$OPTARG;;
+  esac
+done
+
+if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 1 ] ; then ACTION="g"; NAME=$1; fi
+if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="s"; NAME=$1; VALUE=$2; fi
+
+if [ ! -z $KEY ] ; then VAR_PATH="$VAR_PATH$KEY/"; fi;
+if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] ; then ACTION="g"; NAME=$3; fi
+if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 4 ] ; then ACTION="s"; NAME=$3; VALUE=$4; fi
 
 mkdir -p $VAR_PATH
 
 case $ACTION in
 
-    "-d") # delete
+    d) # delete
         rm -f $VAR_PATH$NAME >/dev/null
     ;;
-    "-a") # append
-        if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ] || [ "$OPTION" = "-i" ]; then
+    a) # append
+        if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ]; then
             echo $VALUE >> $VAR_PATH$NAME
         fi
     ;;
-    "-g") # get
+    g) # get
         cat $VAR_PATH$NAME 2>/dev/null
     ;;
-    "-s") # set
+    s) # set
         echo $VALUE > $VAR_PATH$NAME
     ;;
-    "-e") # exists
+    e) # exists
         test -f $VAR_PATH$NAME
         exit $?
-    ;;
-    "--set-env")
-        printenv | while read line; do
-            var=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\1/g')
-            val=$(echo "$line" | sed 's/\(.*\)=\(.*\)$/\2/g')
-            echo "$val" > $VAR_PATH$var
-        done
     ;;
 
 esac

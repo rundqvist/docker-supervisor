@@ -7,6 +7,24 @@ cat /app/supervisor/info.txt
 
 var --set-env;
 
+if [ -f /app/mandatory.cfg ] ; then
+    for var in $(cat /app/mandatory.cfg) ; do
+
+        if [ -z "$(var $var)" ] ; then
+            log -e supervisor "Environment variable '$var' is mandatory. "
+            var abort true
+        else
+            log -d supervisor "Mandatory variable '$var' is ok."
+        fi
+    done
+fi
+
+if [ "$(var abort)" = "true" ] ; then
+    log -e supervisor "Failed to start."
+    sleep 5;
+    exit 1;
+fi 
+
 log -i supervisor "Initializing container.";
 
 for i in 0 1 2 3 4 5 6 7 8 9 ; do

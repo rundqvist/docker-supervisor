@@ -1,6 +1,6 @@
 #!/bin/sh
 
-log -v supervisor "[health] Check health"
+log -d supervisor "[health] Running health checks."
 
 #
 # Find all healtcheck.sh files
@@ -12,17 +12,15 @@ for filepath in $CHECKS ; do
     #
     # Ensure execution rights and execute file
     #
-    log -d supervisor "[health] Executing $filepath"
+    log -v supervisor "[health] Executing $filepath"
     chmod +x $filepath    
     $filepath
 
     #
     # Check outcome
     #
-    RC=$?
-
-    if [ $RC -eq 1 ]; then
-        log -e supervisor "[health] $filepath failed"
+    if [ $? -eq 1 ]; then
+        log -d supervisor "[health] $filepath failed"
         exit 1;
     fi
 done

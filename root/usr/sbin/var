@@ -21,34 +21,58 @@ while getopts ":g:s:d:a:e:k:v:" arg; do
   esac
 done
 
+#echo $ACTION", "$NAME", "$2", "$3", "$4
+
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 1 ] ; then ACTION="g"; NAME=$1; fi
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="s"; NAME=$1; VALUE=$2; fi
+if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] && ( [ "$2" = "+" ] || [ "$2" = "-" ] ) ; then ACTION=$2; NAME=$1; VALUE=$3; fi
 
 if [ ! -z $KEY ] ; then VAR_PATH="$VAR_PATH.$KEY/"; fi;
+if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="l"; NAME=$2; fi
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] ; then ACTION="g"; NAME=$3; fi
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 4 ] ; then ACTION="s"; NAME=$3; VALUE=$4; fi
+if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 5 ] && ( [ "$4" = "+" ] || [ "$4" = "-" ] ) ; then ACTION=$4; NAME=$3; VALUE=$5; fi
+
+#echo $NAME", "$ACTION", "$VALUE; exit 0;
 
 mkdir -p $VAR_PATH
 
+if [ -z "$ACTION" ] || [ -z "$NAME" ] ; then
+    echo "Syntax error in var."
+    log -e supervisor "Syntax error in var."
+    exit 1;
+fi
+
 case $ACTION in
 
-    d) # delete
-        rm -f $VAR_PATH$NAME >/dev/null
-    ;;
     a) # append
         if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ]; then
             echo $VALUE >> $VAR_PATH$NAME
         fi
     ;;
-    g) # get
-        cat $VAR_PATH$NAME 2>/dev/null
-    ;;
-    s) # set
-        echo $VALUE > $VAR_PATH$NAME
+    d) # delete
+        rm -f $VAR_PATH$NAME >/dev/null
     ;;
     e) # exists
         test -f $VAR_PATH$NAME
         exit $?
+    ;;
+    g) # get
+        cat $VAR_PATH$NAME 2>/dev/null
+    ;;
+    l) # list (keys only)
+        ls $VAR_PATH | tr ' ' '\n'
+    ;;
+    s) # set
+        echo $VALUE > $VAR_PATH$NAME
+    ;;
+    +|-) # math
+        val=$(cat $VAR_PATH$NAME 2>/dev/null)
+        if [ -z "$val" ] ; then
+            val=0
+        fi
+        
+        echo $(expr $val $ACTION $VALUE) > $VAR_PATH$NAME
     ;;
 
 esac

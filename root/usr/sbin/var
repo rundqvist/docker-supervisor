@@ -58,7 +58,6 @@ case $ACTION in
     ;;
     e) # exists
         test -f $VAR_PATH$NAME
-        exit $?
     ;;
     g) # get
         cat $VAR_PATH$NAME 2>/dev/null
@@ -79,3 +78,5 @@ case $ACTION in
     ;;
 
 esac
+
+exit $?

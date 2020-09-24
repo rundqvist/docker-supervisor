@@ -24,6 +24,7 @@ if [ $LEVEL -gt $THRESHOLD ] ; then
     if [ -z "$3" ] ; then
         echo "[$timestamp] [$LABEL] $2" >> /var/log/main.log
     else
-        echo "[$timestamp] [$LABEL] [$2] $3" >> /var/log/main.log
+        m=$2
+        printf "[$timestamp] [$LABEL] [%-10s] $3\n" "${m:0:10}" >> /var/log/main.log
     fi
 fi

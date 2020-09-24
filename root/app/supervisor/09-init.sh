@@ -4,7 +4,7 @@ log -v supervisor "Checking network..."
 
 if var -e NETWORK
 then
-    log -i supervisor "Adding route for communication with network $(var NETWORK)/24";
+    log -i supervisor "Adding route for communication with network $(var NETWORK)/24.";
     route add -net $(var NETWORK) netmask 255.255.255.0 gw $(ip route | awk '/default/ { print $3 }') 2>/dev/null
 
     if [ $? -eq 1 ]

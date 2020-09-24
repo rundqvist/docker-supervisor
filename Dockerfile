@@ -11,7 +11,7 @@ COPY root /
 RUN chmod +x /usr/sbin/log /usr/sbin/var \
 	&& chmod +x /app/healthcheck.sh /app/entrypoint.sh
 
-HEALTHCHECK --interval=30s --timeout=60s --start-period=15s \  
+HEALTHCHECK --interval=60s --timeout=30s --start-period=15s \  
  CMD /bin/sh /app/healthcheck.sh
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]

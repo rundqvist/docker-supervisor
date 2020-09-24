@@ -32,12 +32,12 @@ do
         # Ensure execution rights and execute file
         #
         chmod +x $filepath
-        log -v supervisor "Executing: "$filepath
+        log -v supervisor "Executing: $filepath."
         $filepath
 
         if [ $? = 1 ]
         then
-            log -e supervisor "Initialize failed on executing: $filepath"
+            log -e supervisor "Initialize failed on executing: $filepath."
             sleep 5;
             exit 1;
         fi

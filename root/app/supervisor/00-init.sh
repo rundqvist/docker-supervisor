@@ -2,7 +2,7 @@
 
 if expr "$(var HOST_IP)" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null
 then
-    log -d supervisor "HOST_IP is $(var HOST_IP)"
+    log -d supervisor "HOST_IP is $(var HOST_IP)."
 
     network=$(var HOST_IP | sed 's/\([0-9\.]*\)\.[0-9][0-9]*$/\1\.0/g')
 
@@ -19,7 +19,7 @@ fi
 
 if expr "$(var NETWORK)" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.0$' >/dev/null
 then
-    log -d supervisor "NETWORK is $(var NETWORK)";
+    log -d supervisor "NETWORK is $(var NETWORK).";
 else
     log -w supervisor "NETWORK is unknown.";
     var -d NETWORK

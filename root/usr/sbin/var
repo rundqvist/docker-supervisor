@@ -13,7 +13,7 @@ if [ "$1" = "--set-env" ] ; then
     exit 0;
 fi
 
-while getopts ":g:s:d:a:e:k:v:" arg; do
+while getopts ":g:s:d:a:e:k:v:c:" arg; do
   case $arg in
     k) KEY=$OPTARG;;
     v) VALUE=$OPTARG;;
@@ -49,6 +49,9 @@ case $ACTION in
         if [ ! "$(cat $VAR_PATH$NAME 2>/dev/null | grep "^$VALUE$")" ]; then
             echo $VALUE >> $VAR_PATH$NAME
         fi
+    ;;
+    c) # count (rows)
+        echo $(cat $VAR_PATH$NAME 2>/dev/null | wc -l)
     ;;
     d) # delete
         rm -f $VAR_PATH$NAME >/dev/null

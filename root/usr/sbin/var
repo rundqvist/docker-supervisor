@@ -21,8 +21,6 @@ while getopts ":g:s:d:a:e:k:v:c:" arg; do
   esac
 done
 
-#echo $ACTION", "$NAME", "$2", "$3", "$4
-
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 1 ] ; then ACTION="g"; NAME=$1; fi
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="s"; NAME=$1; VALUE=$2; fi
 if [ -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] && ( [ "$2" = "+" ] || [ "$2" = "-" ] ) ; then ACTION=$2; NAME=$1; VALUE=$3; fi
@@ -32,8 +30,6 @@ if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 2 ] ; then ACTION="l"; NAME=$2;
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 3 ] ; then ACTION="g"; NAME=$3; fi
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 4 ] ; then ACTION="s"; NAME=$3; VALUE=$4; fi
 if [ ! -z $KEY ] && [ -z "$ACTION" ] && [ $# -eq 5 ] && ( [ "$4" = "+" ] || [ "$4" = "-" ] ) ; then ACTION=$4; NAME=$3; VALUE=$5; fi
-
-#echo $NAME", "$ACTION", "$VALUE; exit 0;
 
 mkdir -p $VAR_PATH
 

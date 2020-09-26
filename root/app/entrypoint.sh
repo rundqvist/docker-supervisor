@@ -7,19 +7,6 @@ cat /app/supervisor/info.txt
 
 var --set-env;
 
-if [ -f /app/mandatory.sh ]
-then    
-    chmod +x /app/mandatory.sh
-    /app/mandatory.sh
-    
-    if [ $? = 1 ]
-    then
-        log -e supervisor "Failed to start."
-        sleep 5;
-        exit 1;
-    fi
-fi
-
 log -i supervisor "Initializing container.";
 
 for i in 0 1 2 3 4 5 6 7 8 9
@@ -37,7 +24,7 @@ do
 
         if [ $? = 1 ]
         then
-            log -e supervisor "Initialize failed on executing: $filepath."
+            log -d supervisor "Initialize failed on executing: $filepath."
             sleep 5;
             exit 1;
         fi

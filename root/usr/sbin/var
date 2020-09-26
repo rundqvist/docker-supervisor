@@ -13,7 +13,7 @@ if [ "$1" = "--set-env" ] ; then
     exit 0;
 fi
 
-while getopts ":g:s:d:a:e:k:v:c:" arg; do
+while getopts ":g:s:d:a:e:k:v:c:w:" arg; do
   case $arg in
     k) KEY=$OPTARG;;
     v) VALUE=$OPTARG;;
@@ -63,6 +63,15 @@ case $ACTION in
     ;;
     s) # set
         echo $VALUE > $VAR_PATH$NAME
+    ;;
+    w) # where
+        for var in $(ls $VAR_PATH)
+        do
+            if [ "$(cat $VAR_PATH$var)" == "$NAME" ]
+            then
+                echo $var
+            fi
+        done
     ;;
     +|-) # math
         val=$(cat $VAR_PATH$NAME 2>/dev/null)

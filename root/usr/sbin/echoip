@@ -1,0 +1,114 @@
+#!/bin/sh
+
+method="dns"
+timeout=2
+while getopts ":f:m:p:s:t:v:" arg; do
+  case $arg in
+    f) fallback=$OPTARG;;
+    m) method=$OPTARG;;
+    p) port=":"$OPTARG;;
+    s) service=$OPTARG;;
+    t) timeout=$OPTARG;;
+    v) verbosity=$OPTARG;;
+  esac
+done
+
+function resolve 
+{
+  local service="$1"
+  local method="$2"
+  local timeout="$3"
+  local port="$4"
+
+  case $service in
+    opendns) ip=$(nslookup myip.opendns.com resolver1.opendns.com 2>/dev/null | grep "Address: " | awk '{print $2}');;
+    google) ip=$(nslookup -query=TXT o-o.myaddr.l.google.com ns1.google.com 2>/dev/null | grep "text" | awk '{print $4}' | tr -d \");;
+    *)
+      if [ "$method" == "dns" ]; then method="https"; fi
+      case $service in
+        ipify) ip=$(wget $method://api.ipify.org$port -T $timeout -O - -q 2>/dev/null);;
+        amazonaws) ip=$(wget $method://checkip.amazonaws.com$port -T $timeout -O - -q 2>/dev/null);;
+        ifconfig.me) ip=$(wget $method://ifconfig.me$port -T $timeout -O - -q 2>/dev/null);;
+        ifconfig.co) ip=$(wget $method://ifconfig.co$port -T $timeout -O - -q 2>/dev/null);;
+        ipecho) ip=$(wget $method://ipecho.net$port/plain -T $timeout -O - -q 2>/dev/null);;
+        ipinfo) ip=$(wget $method://ipinfo.io$port/ip -T $timeout -O - -q 2>/dev/null);;
+      esac
+    ;;
+  esac
+
+  if [ $? -eq 0 ] && [ ! -z "$ip" ]
+  then
+    if [ ! -z "$verbosity" ]
+    then
+      echo "$ip:$service:$method:$port:$timeout";
+    else
+      echo "$ip";
+    fi
+  fi
+}
+
+function execute 
+{
+  local method="$1"
+  local timeout="$2"
+  local port="$3"
+
+  cmd=""
+  case $method in
+    dns)
+      cmd=$cmd"resolve opendns $method\n"
+      cmd=$cmd"resolve google $method\n"
+    ;;
+    http|https)
+      cmd=$cmd"resolve ipify $method $timeout $port\n"
+      cmd=$cmd"resolve amazonaws $method $timeout $port\n"
+      cmd=$cmd"resolve ifconfig.me $method $timeout $port\n"
+      cmd=$cmd"resolve ifconfig.co $method $timeout $port\n"
+      cmd=$cmd"resolve ipecho $method $timeout $port\n"
+      cmd=$cmd"resolve ipinfo $method $timeout $port\n"
+    ;;
+  esac
+
+  echo -e $cmd | sed '/^$/d' | shuf | while read line
+  do    
+    ip="$(eval $line)"
+    if [ "$verbosity" == "debug" ]
+    then
+      echo "$ip"
+    elif [ ! -z "$ip" ]
+    then
+      echo "$ip"
+      break
+    fi      
+  done
+}
+
+if [ ! -z "$service" ]
+then
+  ip="$(resolve $service $method $timeout $port)"
+  if [ ! -z "$ip" ]
+  then 
+    echo $ip;
+    exit 0;
+  fi
+  exit 1;
+fi
+
+ip=$(execute $method $timeout $port)
+if [ ! -z "$ip" ]
+then
+  echo "$ip"
+  exit 0;
+fi
+
+if [ ! -z "$fallback" ]
+then
+  ip=$(execute $fallback)
+  if [ ! -z "$ip" ]
+  then
+    echo "$ip"
+    exit 0;
+  fi
+fi
+
+exit 1;

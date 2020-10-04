@@ -35,7 +35,7 @@ mkdir -p $VAR_PATH
 
 if [ -z "$ACTION" ] || [ -z "$NAME" ] ; then
     echo "Syntax error in var."
-    log -e supervisor "Syntax error in var."
+    log -e "Syntax error in var."
     exit 1;
 fi
 

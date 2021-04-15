@@ -3,8 +3,6 @@
 touch /var/log/main.log
 tail -f -n 0 /var/log/main.log &
 
-cat /app/supervisor/info.txt
-
 var --set-env;
 
 log -i "Initializing container.";

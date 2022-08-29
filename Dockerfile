@@ -1,4 +1,4 @@
-FROM rundqvist/xmrig:latest
+FROM alpine:3.16
 
 LABEL maintainer="mattias.rundqvist@icloud.com"
 
